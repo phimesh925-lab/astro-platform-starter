@@ -1,0 +1,296 @@
+# Repository: crickflow-landing
+
+This single file contains all assets for a lightweight, accessible, production-ready static landing page for **CrickFlow** plus a GitHub Actions workflow to auto-deploy to GitHub Pages.
+
+---
+
+## Files included (each below is a separate file you can copy into your repo)
+
+### 1) `README.md`
+
+```md
+# CrickFlow — Landing Page
+
+This repository contains a static landing page for **CrickFlow** — a fictional cricket analytics / fan engagement product. It is lightweight, responsive, and accessible.
+
+## Structure
+
+```
+/ (root)
+├─ index.html
+├─ assets/
+│  ├─ css/styles.css
+│  └─ js/main.js
+├─ images/
+│  └─ (place hero/team logos if desired)
+└─ .github/workflows/pages.yml
+```
+
+## Deploy
+1. Push this repo to GitHub (e.g. `crickflow`).
+2. Enable GitHub Pages (deploy from `gh-pages` branch or `main`/`docs/` depending on workflow). The included workflow deploys automatically to GitHub Pages using `peaceiris/actions-gh-pages`.
+
+## License
+MIT
+```
+```
+
+---
+
+### 2) `.github/workflows/pages.yml` (GitHub Actions — deploy to GitHub Pages)
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install and build (no-op for static)
+        run: |
+          # If you add a build step (webpack, hugo, etc.) add it here.
+          echo "No build step."
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+```
+
+> This workflow publishes the repository root to the `gh-pages` branch whenever you push to `main`. GitHub Pages should be configured to serve from the `gh-pages` branch.
+
+---
+
+### 3) `index.html`
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CrickFlow — Real-time cricket analytics & fan tools</title>
+  <meta name="description" content="CrickFlow: live analytics, player insights, and personalised match flows for cricket fans and teams." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <meta name="theme-color" content="#0b6e4f">
+</head>
+<body class="cr-root">
+  <header class="site-header" role="banner">
+    <div class="container">
+      <a class="brand" href="#" aria-label="CrickFlow home">
+        <svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="10" fill="#0b6e4f" />
+          <path d="M7 12c1.5-4 9-4 10 0" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-text">CrickFlow</span>
+      </a>
+      <nav class="nav" role="navigation" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact" class="cta">Get early access</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1 id="hero-title">Cricket insights, faster than the ball.</h1>
+          <p class="lead">Live analytics, predictive player flow, and shareable highlights — built for fans, coaches & broadcasters.</p>
+          <p class="hero-actions">
+            <a class="btn primary" href="#contact">Join the waitlist</a>
+            <a class="btn ghost" href="#features">See features</a>
+          </p>
+          <ul class="trust" aria-hidden="true">
+            <li>Live metrics</li>
+            <li>Player heatmaps</li>
+            <li>Smart highlights</li>
+          </ul>
+        </div>
+
+        <figure class="hero-media" aria-hidden="false">
+          <div class="card">
+            <img src="/images/hero-dashboard.png" alt="CrickFlow dashboard mock — match timeline, player stats" />
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="features" class="container features" aria-labelledby="features-title">
+      <h2 id="features-title">Features</h2>
+      <div class="feature-grid">
+        <article>
+          <h3>Real-time match flow</h3>
+          <p>Streamline match events into a single timeline — ball-by-ball insights and predicted outcomes.</p>
+        </article>
+        <article>
+          <h3>Player analytics</h3>
+          <p>Detailed batting/fielding/wagon-wheel visualisations and custom player reports.</p>
+        </article>
+        <article>
+          <h3>Shareable highlights</h3>
+          <p>Create short highlight reels for social sharing and replay analysis.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="pricing" class="container pricing" aria-labelledby="pricing-title">
+      <h2 id="pricing-title">Pricing</h2>
+      <div class="pricing-grid">
+        <div class="card">
+          <h3>Free</h3>
+          <p class="price">Free</p>
+          <ul>
+            <li>Basic live scoreboard</li>
+            <li>Limited highlights</li>
+          </ul>
+          <a class="btn" href="#contact">Sign up</a>
+        </div>
+        <div class="card featured">
+          <h3>Pro</h3>
+          <p class="price">$12 / month</p>
+          <ul>
+            <li>Full analytics dashboard</li>
+            <li>Custom player reports</li>
+          </ul>
+          <a class="btn primary" href="#contact">Get early access</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="container contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Get early access</h2>
+      <form class="contact-form" onsubmit="handleForm(event)">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@team.com" required />
+        <label for="role">I am a</label>
+        <select id="role" name="role">
+          <option>Fan</option>
+          <option>Coach</option>
+          <option>Broadcaster</option>
+        </select>
+        <button class="btn primary" type="submit">Join waitlist</button>
+        <p class="form-note" id="form-note" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>© <span id="year">2025</span> CrickFlow — Built with ❤️. <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>
+```
+
+---
+
+### 4) `assets/css/styles.css`
+
+```css
+:root{
+  --bg:#0f1720;
+  --muted:#6b7280;
+  --accent:#0b6e4f; /* deep green */
+  --accent-2:#06b6d4; /* teal accent for highlights */
+  --surface:#0b1220;
+  --radius:14px;
+  --container:1200px;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:linear-gradient(180deg,#071018 0%, #071722 100%);color:#e6eef1;line-height:1.45}
+.container{max-width:var(--container);margin:0 auto;padding:2rem}
+.site-header{backdrop-filter: blur(6px);position:sticky;top:0;z-index:40;background:linear-gradient(180deg, rgba(7,10,12,0.55), rgba(7,10,12,0.35));border-bottom:1px solid rgba(255,255,255,0.03)}
+.site-header .container{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:.6rem;color:inherit;text-decoration:none}
+.brand-text{font-weight:800;letter-spacing:.4px}
+.nav a{color:var(--muted);margin-left:1rem;text-decoration:none}
+.nav a.cta{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:.5rem .75rem;border-radius:10px;color:#fff}
+.hero{padding:4rem 0}
+.hero-grid{display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:center}
+.hero-copy h1{font-size:2.25rem;margin:0 0 .5rem}
+.lead{color:var(--muted);margin-bottom:1rem}
+.btn{display:inline-block;background:transparent;color:inherit;padding:.7rem 1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.06);text-decoration:none}
+.btn.primary{background:var(--accent);border-color:transparent;color:white}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.trust{list-style:none;padding:0;margin-top:1rem;display:flex;gap:1rem;color:var(--muted)}
+.hero-media .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:1rem;border-radius:16px;box-shadow:0 8px 30px rgba(2,6,23,.6)}
+.features{padding:3rem 0}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.feature-grid article{background:rgba(255,255,255,0.02);padding:1.25rem;border-radius:12px}
+.pricing{padding:3rem 0}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.card{background:rgba(255,255,255,0.02);padding:1.25rem;border-radius:12px}
+.card.featured{border:2px solid rgba(11,110,79,0.2);transform:translateY(-6px)}
+.contact{padding:3rem 0}
+.contact-form{display:grid;gap:.75rem;max-width:460px}
+.contact-form input, .contact-form select{padding:.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit}
+.form-note{color:var(--accent-2);font-size:.95rem}
+.site-footer{border-top:1px solid rgba(255,255,255,0.03);padding:1.25rem 0;color:var(--muted)}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .feature-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+}
+```
+
+---
+
+### 5) `assets/js/main.js`
+
+```js
+function handleForm(e){
+  e.preventDefault();
+  const email = document.querySelector('#email').value.trim();
+  const note = document.querySelector('#form-note');
+  if(!email){ note.textContent = 'Please enter a valid email.'; return }
+  // Minimal client-side UX: pretend to submit
+  note.textContent = 'Thanks — you\'re on the waitlist! We\'ll email updates.';
+  document.querySelector('.contact-form').reset();
+  // TODO: swap this for a real API call (Netlify functions, Vercel, Supabase)
+}
+
+// small progressive enhancement: update year
+document.getElementById('year').textContent = new Date().getFullYear();
+```
+
+---
+
+## Notes & next steps
+
+- Replace `/images/hero-dashboard.png` with an actual screenshot (place in `images/` folder).
+- If you prefer a static-site generator (Jekyll/Hugo/Next), add the build step to the Actions workflow and change `publish_dir` accordingly.
+- To enable GH Pages: Settings → Pages → Select `gh-pages` branch (if not auto-configured).
+
+---
+
+Happy to: deploy this to a GitHub repo for you (I can generate the full file set), or convert this to a React + Tailwind single-file app if you prefer.
+
+
